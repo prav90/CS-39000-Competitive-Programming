@@ -1,0 +1,74 @@
+import java.io.*;
+import java.util.*;
+
+public class MineSweeper {
+  
+  static int countMines(int i, int j, char[][] mine, int a, int b) {
+    int count = 0;
+    if(i-1 >= a && j-1 >= b && mine[i-1][j-1] == '*')
+      count++;
+    if(i-1 >= a && mine[i-1][j] == '*')
+      count++;
+    if(i-1 >= a && j+1<=b && mine[i-1][j+1] == '*')
+      count++;
+    if(j-1 >= b && mine[i][j-1] == '*')
+      count++;
+    if(j+1 <= b && mine[i][j+1] == '*')
+      count++;
+    if(i+1 <= a && j-1 >= b && mine[i+1][j-1] == '*')
+      count++;
+    if(i+1 <= a && j+1 <= b && mine[i+1][j+1] == '*')
+      count++;
+    return count;
+  }
+  
+  
+  public static void main(String [] args) throws Exception{
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    PrintWriter pr = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
+    StringTokenizer sz;
+    int field = 1;
+    while(true) {
+      sz = new StringTokenizer(br.readLine());
+      
+      int a = Integer.parseInt(sz.nextToken());
+      int b = Integer.parseInt(sz.nextToken());
+      
+      if(a == 0 && b == 0) break;
+      
+      char [][] mine = new char[a][b];
+      int [][] count = new int[a][b];
+      for(int i = 0; i < a; i++) {
+        String ip = br.readLine();
+        for(int j = 0; j < b; j++) {
+          mine[i][j] = ip.char(j);
+        }
+      }
+      for(int i = 0; i < a; i++) {
+        for(int j = 0; j < b; j++) {
+          if(mine[i][j] == '*') {
+            count[i][j] = -1;
+          }
+          else {
+           count[i][j] = countMines(i,j,mine,a-1,b-1);
+          }
+        }
+      }
+      pr.println("Field #"+field+":");
+      for(int i = 0; i < a; i++) {
+        for(int j = 0; j < b; j++) {
+          if(count[i][j] == -1) {
+           pr.print('*');
+          }
+          else {
+            pr.print(count[i][j]);
+          }
+        }
+        pr.print("\n");
+      }
+      pr.println();
+      field++;
+    }
+    pr.close();
+  }
+}

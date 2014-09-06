@@ -1,0 +1,30 @@
+import java.util.*;
+import java.io.*;
+
+
+public class CostCutting {
+  public static void main(String [] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    PrintWriter pw = new PrintWriter(System.out);
+    StringTokenizer sz = new StringTokenizer(br.readLine());
+    int t = Integer.parseInt(sz.nextToken());
+    for(int z = 1; z <= t; z++) {
+      sz = new StringTokenizer(br.readLine());
+      
+      int a = Integer.parseInt(sz.nextToken());
+      int b = Integer.parseInt(sz.nextToken());
+      int c = Integer.parseInt(sz.nextToken());
+      
+      if( (a < b && a > c) || (a < c && a > b)) {
+        pw.println("Case " + z + ": "+a);
+      }
+      else if( (b < a && b > c) || (b < c && b > a) ) {
+         pw.println("Case " + z + ": "+b);
+      }
+      else {
+         pw.println("Case " + z + ": "+c);
+      }
+    }
+    pw.close();
+  }
+}

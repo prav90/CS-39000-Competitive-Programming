@@ -1,0 +1,46 @@
+import java.io.*;
+import java.util.*;
+
+public class MotherBears {
+  static boolean isSpecial(char i) {
+    if(i < 'a' || i > 'z' || i > 'A' || i < 'z')
+      return true;
+    return false;
+  }
+  static boolean isPalindrome(String str) {
+   int n = str.length();
+   int i = 0, j = n-1;
+   boolean isPalindrome = true;
+   while(i < j) {
+     while(i < j && isSpecial(ip.charAt(i)) ) {
+       i++;
+     }
+     while(j > i && isSpecial(ip.charAt(j)) ) {
+       j--;
+     }
+     if(ip.charAt(i) != ip.charAt(j)) {
+       isPalindrome = false;
+       break;
+     }
+     i++;
+     j--;
+   }
+  }
+  public static void main(String [] args) throws Exception{
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    PrintWriter pr = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
+    StringTokenizer sz;
+    while(true) {
+      String ip = br.readLine();
+      if(ip.equals("DONE"))
+        break;
+      if(isPalindrome(ip)) {
+        pr.println("You won't be eaten!");
+      }
+      else {
+        pr.println("Uh oh..");
+      }
+    }
+    pr.close();
+  }
+}
