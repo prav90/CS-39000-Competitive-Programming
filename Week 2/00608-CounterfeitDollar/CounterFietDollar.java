@@ -1,6 +1,6 @@
 import java.io.*;
 import java.util.*;
-
+/* http://blog.csdn.net/lyy289065406/article/details/6661421 */
 public class CounterFietDollar {
     
   public static void main(String [] args) throws Exception{
@@ -19,55 +19,89 @@ public class CounterFietDollar {
         balance2[i] = sz.nextToken();
         result[i] = sz.nextToken();
       }
-      boolean [] original = new boolean[12];
-      boolean [] up = new boolean[12];
-      boolean [] down = new boolean[12];
-      for(int i = 0; i < 3; i++) {
-        if(result[i].equals("even")) {
-          for(int j = 0; j < balance1[i].length(); j++) {
-            oiginal[balance1[i].charAt(j)] = true;
-          }
-          for(int j = 0; j < balance2[i].length(); j++) {
-            oiginal[balance2[i].charAt(j)] = true;
-          }
-        }
-        else if(result[i].equals("up")) {
-          boolean [] firstMatch = new boolean[12];
-          for(int j = 0; j < balance1[i].length(); j++) {
-            firstMatch[balance1[i].charAt(j)] = true;
-          }
-          boolean [] secondMatch = new boolean[12];
-          for(int j = 0; j < balance2[i].length(); j++) {
-            secondMatch[balance2[i].charAt(j)] = true;
-          }
-          for(int j = 0; j < 12; j++) {
-            if(firstMatch[i] && secondMatch[i]) {
-              up[i] = true;
-            }
-          }
-        }
-        else {
-          boolean [] firstMatch = new boolean[12];
-          for(int j = 0; j < balance1[i].length(); j++) {
-            firstMatch[balance1[i].charAt(j)] = true;
-          }
-          boolean [] secondMatch = new boolean[12];
-          for(int j = 0; j < balance2[i].length(); j++) {
-            secondMatch[balance2[i].charAt(j)] = true;
-          }
-          for(int j = 0; j < 12; j++) {
-            if(firstMatch[i] && secondMatch[i]) {
-              down[i] = true;
-            }
-          }
-        }
-        
-        int candidate = -1;
-        for(int i = 0; i < 12; i++) {
-          if(
-        }
-        
+	  
+	  int even = 0;
+	  int up = 0;
+	  int down = 0;
+      for(int j = 0; j < 3; j++) {
+		if(result[j].equals("even")) {
+			for(int i = 0; i < balance1[j].length(); i++) {
+				even |= 1<<(balance1[j].charAt(i) - 'A');
+			}
+			for(int i = 0; i < balance2[j].length(); i++) {
+				even |= 1<<(balance2[j].charAt(i) - 'A');
+			}
+		}
+		else if(result[j].equals("up")) {
+			int first = 0;
+			for(int i = 0; i < balance1[j].length(); i++) {
+				first |= 1<<(balance1[j].charAt(i) - 'A');
+			}
+			if(down == 0) down = first;
+			else down = down & first; // intersection
+			int second = 0;
+			for(int i = 0; i < balance2[j].length(); i++) {
+				second |= 1<<(balance2[j].charAt(i) - 'A');
+			}
+			if(up == 0) up = second;
+			else up = up & second; // intersection
+		}
+		else {
+			int first = 0;
+			for(int i = 0; i < balance1[j].length(); i++) {
+				first |= 1<<(balance1[j].charAt(i) - 'A');
+			}
+			if(up == 0) up = first;
+			else up = up & first; // intersection
+			int second = 0;
+			for(int i = 0; i < balance2[j].length(); i++) {
+				second |= 1<<(balance2[j].charAt(i) - 'A');
+			}
+			if(down == 0) down = second;
+			else down = down & second; // intersection
+		}
       }
+	  
+	  //System.out.println(Integer.toBinaryString( even ));
+	  //System.out.println(Integer.toBinaryString( up ));
+	  //System.out.println(Integer.toBinaryString( down ));
+	  
+	  for(char s = 'A'; s <= 'L'; s++) {
+		int shift = s - 'A';
+		if((even & (1<<shift)) > 0) { // if a coin is marked as even
+			up &= ~(1 << shift); // clear that bit
+			down &= ~(1 << shift); // clear that bit
+		}
+	  }
+	  //System.out.println(up);
+	  //System.out.println(down);
+	  if(up > 0) { // counterfeit coin is light
+		for(char s = 'A'; s <= 'L'; s++) {
+			int shift = s - 'A';
+			if( (up & (1<<shift)) > 0) {
+				pr.print(s + " is the counterfiet coin and it is light.");
+			}
+		}
+	  }
+	  else if( down > 0){ // counterfeit coin is heavy
+		for(char s = 'A'; s <= 'L'; s++) {
+			int shift = s - 'A';
+			if( (down & (1<<shift)) > 0) {
+				pr.print(s + " is the counterfiet coin and it is heavy.");
+			}
+		}
+	  }
+	  else { // the unset coin  in even is the counterfeit coin
+		for(char s = 'A'; s <= 'L'; s++) {
+			int shift = s - 'A';
+			if( (even & (1<<shift)) == 0) {
+				pr.print(s + " is the counterfiet coin and it is heavy.");
+			}
+		}
+	  }
+	  if(casen < t) {
+		pr.println();
+	  }
     }
     pr.close();
   }
